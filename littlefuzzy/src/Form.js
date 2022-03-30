@@ -25,16 +25,6 @@ function Form (props) {
     const [formValues, setFormValues] = useState(initialFormValues)
     const [formError, setFormError] = useState(initialFormError)
 
-    // Making an onChange function for onChange
-    const onChange = (event) => {
-
-        // Defining Name, type, checked, value = to the event 
-        const {name, type, checked, value} = event.targe.value
-
-        // Making variable to grab the correct value of the checked boxes
-        const checkerValue = type === 'checkbox' ? checked : value 
-    }
-
     // Making a validator for boolean values
     function validator (name, value) {
         yup.reach(formTest, name)
@@ -51,6 +41,23 @@ function Form (props) {
 
         // Changing form values
         setFormValues({...formValues, [name]: value})
+    }
+
+    // Making an onChange function for onChange
+    const onChange = (event) => {
+
+        // Defining Name, type, checked, value = to the event 
+        const {name, type, checked, value} = event.targe.value
+
+        // Making variable to grab the correct value of the checked boxes
+        const checkerValue = type === 'checkbox' ? checked : value 
+
+        change(name, value)
+    }
+
+    // Making function for onSubmit function
+    function onSubmit (event) {
+        event.preventDefault()
     }
 
     return (
