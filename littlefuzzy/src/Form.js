@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as yup from 'yup';
 import formTest from './Validation';
+import axios from 'axios';
 
 
 function Form (props) {
@@ -34,7 +35,7 @@ function Form (props) {
         yup.reach(formTest, name)
         .validate(value)
         .then(() => setFormError({...formError, [name]: ''}))
-        .catch(err => setFormError({...formError, [err]: err.formError[0]}))
+        .catch(err => setFormError({...formError, [err]: err.formError['Check yo stuff']}))
     }
 
     // Making a Change function for onChange
@@ -59,15 +60,26 @@ function Form (props) {
         change(name, checkerValue)
     }
 
+     // Making a function for post to send the Form
+     function sender (newVariables) {
+        axios.post(`https://reqres.in/api/users`, newVariables)
+        .then(object => console.log(object))
+        .catch(err => console.log('error!',err))
+    }
+
     // Making Value trimmer/Cleaner
-    function cleaner () {
+    function cleanPosting () {
 
         // Storing formValues keys inside of a new object
         const refinement = {
-            name: formValues.name.trim(),
-            email: formValues.email.trim(),
-            email: formValues.password.trim()
+            name: formValues.name.replace(/\s+/g, ' ').trim(),
+            email: formValues.email.replace(/\s+/g, ' ').trim(),
+            password: formValues.password.replace(/\s+/g, ' ').trim()
         }
+
+        sender(refinement)
+        
+        return refinement
     }
 
     // Making function for onSubmit function
@@ -76,11 +88,11 @@ function Form (props) {
         // Stopping full page reload
         event.preventDefault()
 
-        // Cleaning the form values
-        cleaner()
+        // Cleaning and Testing Form
+        cleanPosting()
 
-        // Testing Form
-        console.log(formValues)
+        // Resetting the form
+        setFormValues(initialFormValues)
     }
 
     // Adding a functionality to disable the button
@@ -91,13 +103,52 @@ function Form (props) {
     return (
         <form onSubmit={onSubmit}>
             <div>
-                <input
-                type='text'
-                name='name'
-                placeHolder='Please type name here'
-                value={formValues.name}
-                onChange={onChange}
-                />
+                <label className='fixer'>
+                    <div className='stubborn'>
+                        <p className='stubborning'>Name</p>
+                    </div> 
+
+                    <input
+                    type='text'
+                    name='name'
+                    placeHolder='Please type name here'
+                    value={formValues.name}
+                    onChange={onChange}
+                    className='fixerUpper'
+                    />
+                </label>
+
+                <br/>
+                <label className='fixer'>
+                    <div className='stubborn'>
+                        <p className='stubborning'>Email</p>
+                    </div> 
+
+                    <input
+                    type='email'
+                    name='email'
+                    placeHolder='Please type email here'
+                    value={formValues.email}
+                    onChange={onChange}
+                    className='fixerUpper'
+                    />
+                </label>
+
+                <br/>
+                <label className='fixer'>
+                    <div className='stubborn'>
+                        <p className='stubborning'>Password</p>
+                    </div> 
+
+                    <input
+                    type='password'
+                    name='password'
+                    placeHolder='Please type password here'
+                    value={formValues.password}
+                    onChange={onChange}
+                    className='fixerUpper'
+                    />
+                </label>
 
                 <br/>
                 <button>Submit</button>
