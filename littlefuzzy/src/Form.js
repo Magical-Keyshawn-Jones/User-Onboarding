@@ -35,7 +35,7 @@ function Form (props) {
         yup.reach(formTest, name)
         .validate(value)
         .then(() => setFormError({...formError, [name]: ''}))
-        .catch(err => setFormError({...formError, [err]: err.formError['Check yo stuff']}))
+        .catch(err => setFormError({...formError, [err]: err.formError[0]}))
     }
 
     // Making a Change function for onChange
